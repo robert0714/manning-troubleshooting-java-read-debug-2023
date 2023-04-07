@@ -16,3 +16,6 @@
 ## [Chapter 9. Investigating locks in multithreaded architectures](https://livebook.manning.com/book/troubleshooting-java/chapter-9/)
 ## [Chapter 10. Investigating deadlocks with thread dumps](https://livebook.manning.com/book/troubleshooting-java/chapter-10/)
 ## [Chapter 11. Finding memory-related issues in an app’s execution](https://livebook.manning.com/book/troubleshooting-java/chapter-11/)
+
+# [Part 3. Finding problems in large systems](https://livebook.manning.com/book/troubleshooting-java/part-3/)
+## [Chapter 12. Investigating apps’ behaviors in large systems](https://livebook.manning.com/book/troubleshooting-java/chapter-12/)
