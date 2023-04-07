@@ -33,8 +33,9 @@ The first argument, ``-XX:+HeapDumpOnOutOfMemoryError``, tells the app to genera
 The following snippet shows the full command for running an app:
 
 ```shell
-java -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=heapdump.bin  -cp .\target\da-ch11-ex2-1.0-SNAPSHOT.jar  main.Main
+java -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=heapdump.bin -Xmx100m  -cp target/da-ch11-ex2-1.0-SNAPSHOT.jar  main.Main
 ```
+
 We’ll use a demo app named ``da-ch11-ex2`` to demonstrate this approach. You can find this app in the projects provided with the book. The app in the following listing continuously adds instances of type Product to a list until the memory fills.
 
 ###### Listing 11.1 Generating a large numbers of instances that can’t be 
@@ -67,6 +68,11 @@ public class Product {
 }
 ```
 Maybe you’re wondering why there is a random name for the product instances. We’ll need that later when we discuss reading a heap dump in section 11.2.2. For the moment, we’re only interested in how to generate a heap dump to figure out why this app is filling its heap memory in seconds.
+
+
+```shell
+java -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=heapdump.bin -Xmx100m  -cp target/da-ch11-ex2-1.0-SNAPSHOT.jar  main.Main
+```
 
 ###### Figure 11.7 You can configure the JVM arguments from your IDE. Add the values in the Run/Debug Configurations before starting the application.
 ![Figure 11.7 You can configure the JVM arguments from your IDE.](./material/CH11_F07_Spilca3.png) 
