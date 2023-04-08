@@ -56,3 +56,57 @@ Fortunately, getting a thread dump using the command line is quite easy :
 * Load the saved thread dump to make it easier to read in a profiler tool.
   * For example, to open it in VisualVM, you select File > Load.
   * We’ll use a tool named fastThread (https://fastthread.io/), which provides a simpler way to visualize the data in a thread dump.
+
+### 10.2.1 Reading plain-text thread dumps
+If you suspect a deadlock, you should focus your investigation on the locks the threads cause (figure 10.8):
+
+* Filter out all threads that are not blocked so that you can focus on the threads that can cause the deadlock.
+* Start with the first candidate thread (a thread you didn’t filter in step 1), and search the lock ID that causes it to be blocked.
+* Find the thread causing that lock, and check what blocks that thread. If at some point you return to the thread you started with, all the threads you parsed are in a deadlock.
+
+###### Figure 10.8 To find a deadlock with a thread dump, follow these three easy steps. First, remove all threads that are not blocked. Then, start with one of the blocked threads and find what is blocking it using the lock ID. Continue this process for each thread. If you return to a thread you already investigated, it means you found a deadlock.
+![Figure 10.8 To find a deadlock with a thread dump, follow these three easy steps. ](./material/CH10_F08_Spilca3.png) 
+
+##### Step 1: Filter out threads that are not locked
+
+First, filter out all the threads that are not locked so that you can focus only on the threads that are potential candidates for the situation you are investigating—the deadlock. A thread dump can describe dozens of threads. You want to eliminate the noise and focus only on the threads that are blocked.
+
+##### Step 2: Take the first candidate thread and find what blocks it
+
+After eliminating the unnecessary thread details, start with the first candidate thread and search by the lock ID that causes a thread to wait. The lock ID is the one between angle brackets (in listing 10.4, "``_Producer``" waits for a lock with ID ``0x000000052e0313f8``).
+
+##### Step 3: Find what blocks the next thread
+
+Repeat the process. If at some point you get to a thread that was already investigated, you’ve found a deadlock; please see the following listing.
+
+Listing 10.4 Finding threads that lock each other
+```shell
+"_Producer" #16 prio=5 os_prio=0 cpu=46.88ms elapsed=763.96s tid=0x000002f964987690 nid=0xcac waiting for monitor entry  [0x000000fe5ceff000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+    at main.Producer.run(Unknown Source)
+    - waiting to lock <0x000000052e0313f8>(a java.util.ArrayList)     
+    - locked <0x000000052e049d38>(a java.util.ArrayList)     
+ 
+"_Consumer" #18 prio=5 os_prio=0 cpu=0.00ms elapsed=763.96s tid=0x000002f96498b030 nid=0x4254 waiting for monitor entry  [0x000000fe5cfff000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+    at main.Consumer.run(Unknown Source)
+    - waiting to lock <0x000000052e049d38> (a java.util.ArrayList)   ❶
+    - locked <0x000000052e0313f8> (a java.util.ArrayList)            ❷
+```    
+❶ The _Consumer thread waits for a lock initiated by the _Producer thread.
+
+❷ The _Producer thread waits for a lock initiated by the _Consumer thread.
+
+Our example demonstrates a simple deadlock that assumes two threads lock each other. Following the three-step process discussed earlier, you’ll see that the "_Producer" thread blocks the "_Consumer" thread, and vice versa. A complex deadlock happens when more than two threads are involved. For example, thread A blocks thread B, thread B blocks thread C, and thread C blocks thread A. You can discover a long chain of threads that lock each other. The longer the chain of threads in the deadlock, the more difficult the deadlock is to find, understand, and solve. Figure 10.9 shows the difference between a complex deadlock and a simple one.
+
+###### Figure 10.9 When only two threads block each other, it’s called a simple deadlock, but a deadlock can be caused by multiple threads that block each other. More threads means more complexity. Thus, when more than two threads are involved, it's called a complex deadlock.
+![Figure 10.9 When only two threads block each other, it’s called a simple deadlock, but a deadlock can be caused by multiple threads that block each other.](./material/CH10_F09_Spilca3.png) 
+
+Sometimes a complex deadlock can be confused with cascading blocked threads (figure 10.10). Cascading blocked threads (also known as cascading locks) are a different issue you can spot using a thread dump. To find cascading threads, follow the same steps as when investigating a deadlock. But instead of finding that one of the threads is blocked by another in the chain (as in the case of a deadlock), in a cascade of locks, you’ll see that one of the threads is waiting for an external event, causing all others to also wait.
+
+###### Figure 10.10 Cascading locks appear when multiple threads enter a chain where they wait for one another. The last thread in the chain is blocked by an external event, such as reading from a data source or calling an endpoint.
+![Figure 10.10 Cascading locks appear when multiple threads enter a chain where they wait for one another.](./material/CH10_F10_Spilca3.png) 
+Cascading blocked threads usually signal a bad design in the multithreaded architecture. When we design an app with multiple threads, we implement threading to allow the app to process things concurrently. Having threads waiting for one another defeats the purpose of a multithreaded architecture. Although sometimes you need to make threads wait for one another, you shouldn’t expect long chains of threads with cascading locks.
+
+### 10.2.2 Using tools to better grasp thread dumps
+https://fastthread.io/

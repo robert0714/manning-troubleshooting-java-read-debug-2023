@@ -19,3 +19,6 @@
 
 # [Part 3. Finding problems in large systems](https://livebook.manning.com/book/troubleshooting-java/part-3/)
 ## [Chapter 12. Investigating apps’ behaviors in large systems](https://livebook.manning.com/book/troubleshooting-java/chapter-12/)
+
+# Tools
+* https://visualvm.github.io/download.html

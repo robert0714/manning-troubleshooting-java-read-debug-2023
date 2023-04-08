@@ -1,4 +1,7 @@
 # 11.2 Using heap dumps to find memory leaks
+
+https://visualvm.github.io/download.html
+
 If the app is running, you can profile to identify any capability that can be optimized. But what if the app crashed and you suspect this happened due to a memory allocation issue? In most cases, app crashes are caused by capabilities with memory allocation problems such as memory leaks—the app doesn’t deallocate the objects it creates in memory even after it doesn’t need them. Since the memory is not infinite, continuously allocating objects will fill the memory at some point, causing the app to crash. In a JVM app, this is signaled with an ``OutOfMemoryError`` thrown at run time.
 
 If the app is not running, you can’t attach a profiler to investigate the execution. But, even so, you have other alternatives to investigate the problem. You can use a heap dump, which is a snapshot of what the heap memory looked like when the app crashed. Although you can collect a heap dump anytime, it is most useful when you can’t profile the app for some reason—maybe because the app crashed or you simply don’t have access to profile the process and you want to determine whether it suffers from any memory allocation issues.

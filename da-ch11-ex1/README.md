@@ -11,14 +11,14 @@ Look at figure 11.1. When discussing how to analyze resource consumption in chap
 ###### Figure 11.1 The memory widget in the Monitor tab in VisualVM helps you to identify if the app spends more memory than usual at any given time. Often, widgets in the Monitor tab, such as CPU and memory consumption, give us clues on how to continue our investigation. When we see that the app consumes an abnormal amount of memory, we may decide to continue with memory profiling the execution.
 ![Figure 11.1 The memory widget in the Monitor tab in VisualVM helps you to identify if the app spends more memory than usual at any given time.](./material/CH11_F01_Spilca3.png)  
 
-The application we use in this chapter is in project da-ch11-ex1. This small web application exposes an endpoint. When calling this endpoint, we give a number, and the endpoint creates that many object instances. We basically make a request to create one million objects (a large enough number for our experiment) and then look at what a profiler tells us about this request execution. This endpoint execution simulates what happens in a real-world situation when a given app capability spends a lot of the app’s memory resources (figure 11.2).
+The application we use in this chapter is in project ``da-ch11-ex1``. This small web application exposes an endpoint. When calling this endpoint, we give a number, and the endpoint creates that many object instances. We basically make a request to create one million objects (a large enough number for our experiment) and then look at what a profiler tells us about this request execution. This endpoint execution simulates what happens in a real-world situation when a given app capability spends a lot of the app’s memory resources (figure 11.2).
 
-###### Figure 11.2 When we call the endpoint exposed by the provided project da-ch11-ex1, the app creates a large number of instances that consume a considerable part of the app’s memory. We’ll analyze this scenario using a profiler.
-![Figure 11.2 we call the endpoint exposed by the provided project da-ch11-ex1.](./material/CH11_F02_Spilca3.png) 
+###### Figure 11.2 When we call the endpoint exposed by the provided project ``da-ch11-ex1``, the app creates a large number of instances that consume a considerable part of the app’s memory. We’ll analyze this scenario using a profiler.
+![Figure 11.2 we call the endpoint exposed by the provided project ``da-ch11-ex1``.](./material/CH11_F02_Spilca3.png) 
 
 To start the project, follow these steps:
 
-* Start project da-ch11-ex1.
+* Start project ``da-ch11-ex1``.
     ```
     mvn clean package
     java -jar target/da-ch11-ex1-1.0-SNAPSHOT.jar
